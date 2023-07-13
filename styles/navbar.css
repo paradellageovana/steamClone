@@ -1,0 +1,169 @@
+
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+body{
+    margin :0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color : #1B2838
+}
+/*main nav bar begining*/
+
+ 
+  
+  a{
+    text-decoration: none;
+    color: #dcdedf;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  a:hover {
+      color: white;
+  }
+  
+  .navbar-container{
+
+    width: 750px;
+    justify-content: space-between;
+    
+  }
+
+  .logo{
+    width: 176px;
+    height: 44px;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  object-fit: cover;
+}
+.logo-link {
+  width: 176px;
+  height: 44px;
+}
+
+.logo-link:active {
+  border: none;
+}
+
+  
+  .main-navbar{
+    justify-content: flex-start;
+  }
+  
+  
+  .dropdown-btn{
+    color :#dcdedf;
+    padding: 5px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+  }
+    
+  .dropdown-btn:hover{
+    color :white;
+  }
+  
+
+
+    
+  .content{
+    display: none;
+    position: absolute;
+    min-width: 100px;
+  }
+  
+  
+  .content a{
+    display: flex;
+    line-height: 2;
+    padding: 0 10px;
+    color :#dcdedf;
+  }
+  
+  .content a:hover {
+    color: #3D4450;
+    background: white; 
+}
+  
+main button:hover {
+  background:#2986CA;
+}
+  
+  .dropdown:hover .content{
+    display:block;
+    background: #3D4450; 
+    z-index: 2;
+  }
+  
+  
+  .navbar-btn{
+    justify-content: flex-end;
+  }
+  
+/*main nav bar ending*/
+
+
+  
+/* media queries */
+
+
+@media screen and (max-width: 600px){
+
+    .navbar-container{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  
+
+  }
+/*footer beggening*/
+
+
+  /*row / col flex*/ 
+  .row{
+    display: flex;
+    flex-direction: row;
+  }
+  .col{
+    display: flex;
+    flex-direction: column;
+  }
+  @media screen and (max-width: 600px) {
+    header {
+      height: auto;
+      padding: 10px;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .navbar-container {
+      width: 100%;
+    }
+  
+    .logo {
+      margin-bottom: 10px;
+    }
+  
+    .main-navbar {
+      flex-direction: column;
+      align-items: flex-start;
+      margin-top: 20px;
+    }
+  
+    .dropdown-btn {
+      padding: 5px 0;
+    }
+  
+    .dropdown .content {
+      position: static;
+      min-width: auto;
+      display: flex;
+      flex-direction: column;
+      margin-top: 5px;
+    }
+  
+    .navbar-btn {
+      margin-top: 20px;
+      justify-content: flex-start;
+    }
+  }
+  
