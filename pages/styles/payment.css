@@ -30,6 +30,7 @@
     overflow: hidden;
     z-index: 1;
     border-radius: 6px;
+    color: aqua;
     box-shadow: 0 15px 24px rgba(37, 44, 65, 0.32);
 
   }
@@ -145,6 +146,24 @@
   .totalTxt {
     position: relative;
     top: 50px;
+  }
+  
+  #resdiv{
+    margin-top: 100px;
+  }
+  .steam-list {
+    list-style: none;
+    padding: 0;
+    
+  }
+  
+  .steam-list-item {
+    background-color: #1b2838;
+    color: #c6d4df;
+    padding: 10px;
+    margin-bottom: 5px; 
+    border-radius: 4px;
+
   }
   
   @media screen and (max-width: 700px) {

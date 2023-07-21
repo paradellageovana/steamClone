@@ -1,83 +1,96 @@
 //הוספת מוצר חדש למאגר המוצרים:
 describe('Add new product', function() {
-    it('should add a new product to the product repository', function() {
-      // Arrange
-      var itemsData = []; // Define an empty itemsData array
-      var newItem = { name: 'New Product', price: 10 }; // Define a new product
-      
-      // Act
-      // Add the new item to the itemsData array
-      itemsData.push(newItem);
-      // Save the updated itemsData in local storage (mock implementation)
-      localStorage.setItem('itemsData', JSON.stringify(itemsData));
-      // Perform any necessary additional operations based on your code implementation
-  
-      // Assert
-      // Check the expected result, for example:
-      // Expect the length of itemsData to be 1 after adding the new product
-      expect(itemsData.length).toBe(1);
-    });
-  });
-  
-
-  //הוספת מוצר לעגלה:
-describe('Add product to cart', function() {
-  it('should add a product to the shopping cart', function() {
+  it('should add a new product to the product repository', function() {
     // Arrange
-    var cart = []; // Define an empty cart
-    var obj = {}; // Create an object to hold the functions
-
+    var itemsData = JSON.parse(localStorage.getItem('itemsData')) || [];
+    var storedItemsData = JSON.parse(JSON.stringify(itemsData)); // Create a copy of the stored itemsData
+    var newItem = { id: itemsData.length + 1,name: 'New Product', price: 10, category:"Category 1",image:"../images/product.jpg"}; // Define a new product
+ 
     // Act
-    obj.addItemToCart = function(name, price, count) {
-      for(var item in cart) {
-        if(cart[item].name === name) {
-          cart[item].count ++;
-          return;
-        }
-      }
-      var item = { name: name, price: price, count: count };
-      cart.push(item);
-    };
+    // Add the new item to the storedItemsData array
+    storedItemsData.push(newItem);
 
-    obj.addItemToCart('Product 1', 10, 1); // Add a product to the cart
+    // Update the itemsData in local storage
+    localStorage.setItem('itemsData', JSON.stringify(storedItemsData));
 
     // Assert
-    expect(cart.length).toBe(1); // Check that the product was added to the cart
-    expect(cart[0].name).toBe('Product 1'); // Check that the product name is correct
+    // Check if the length of storedItemsData has increased after adding the new product
+    expect(storedItemsData.length).toBe(itemsData.length + 1);
   });
 });
 
   
 
-  //הסרת מוצר מהעגלה:
+// הוספת מוצר לעגלה:
+describe('Add product to cart', function() {
+  it('should add a product to the shopping cart', function() {
+    // Arrange
+    var itemToAdd = { id: "1", name: 'Product 1', price: 10, category: "Category 1", image: "../images/product.jpg" }; // Product to add to the cart
+    let cartItems;
+    // Act
+    function addToCart(item) {
+       cartItems = localStorage.getItem("items");
+
+      if (cartItems) {
+        cartItems = JSON.parse(cartItems);
+      } else {
+        cartItems = [];
+      }
+
+      const existingItem = cartItems.find((cartItem) => cartItem.id === item.id);
+
+      if (existingItem) {
+        existingItem.quantity++;
+      } else {
+        item.quantity = 1;
+        cartItems.push(item);
+      }
+
+      localStorage.setItem("items", JSON.stringify(cartItems));
+    }
+
+    addToCart(itemToAdd); // Add a product to the cart
+
+    // Assert
+    var updatedCartItems = JSON.parse(localStorage.getItem('items'));
+    expect(updatedCartItems.length).toBe(cartItems.length); // Check that the product was added to the cart
+  });
+});
+
+
+  //הורדת מוצר מהעגלה:
   describe('Remove product from cart', function() {
     it('should remove a product from the shopping cart', function() {
       // Arrange
-      var cart = []; // Define an empty cart
-      var obj = {}; // Create an object to hold the functions
-  
+      var itemToRemove = { id: "1", name: 'Product 1', price: 10, category: "Category 1", image: "../images/product.jpg" }; // Product to remove from the cart
+      let cartItems;
       // Act
-      obj.removeItemFromCart = function(name) {
-        for(var item in cart) {
-          if(cart[item].name === name) {
-            cart[item].count--;
-            if(cart[item].count === 0) {
-              cart.splice(item, 1);
-            }
-            break;
-          }
-        }
-      };
+      function removeFromCart(item) {
+        cartItems = localStorage.getItem("items");
   
-      // Add a product to the cart
-      cart.push({ name: 'Product 1', price: 10, count: 1 });
-      
-      obj.removeItemFromCart('Product 1'); // Remove the product from the cart
+        if (cartItems) {
+          cartItems = JSON.parse(cartItems);
+        } else {
+          cartItems = [];
+        }
+  
+        const existingItemIndex = cartItems.findIndex((cartItem) => cartItem.id === item.id);
+  
+        if (existingItemIndex !== -1) {
+          cartItems.splice(existingItemIndex, 1);
+        }
+  
+        localStorage.setItem("items", JSON.stringify(cartItems));
+      }
+  
+      removeFromCart(itemToRemove); // Remove a product from the cart
   
       // Assert
-      expect(cart.length).toBe(0); // Check that the product was removed from the cart
+      var updatedCartItems = JSON.parse(localStorage.getItem('items'));
+      expect(updatedCartItems.length).toBe(cartItems.length); // Check that the product was removed from the cart
     });
   });
+  
   
 
   //תהליך רכישה כללי:
