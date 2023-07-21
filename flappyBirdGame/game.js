@@ -61,6 +61,8 @@ const bird = {
 
 let score = 0;
 const scoreDisplay = document.getElementById("scoreDisplay");
+const previousScore = localStorage.getItem("scoreTimeDisplay");
+const previousTime = localStorage.getItem("scoreTimeDisplay");
 
 // Pipe class
 class Pipe {
@@ -114,7 +116,9 @@ const pipes = [];
 let frames = 0;
 let gameOver = false;
 let gameStarted = false;
-// Main game loop
+
+
+//********************** */ Main game loop*************************************
 function gameLoop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
@@ -137,6 +141,7 @@ function gameLoop() {
   }
 
   if (gameOver) {
+    saveScoreAndTime();
     resetButton.style.display = "block";
     gameOverMessage.style.display = "block";
     return;
@@ -145,6 +150,9 @@ function gameLoop() {
   frames++;
   requestAnimationFrame(gameLoop);
 }
+
+//********************** */
+
 const startButton = document.getElementById("startButton");
 const resetButton = document.getElementById("resetButton");
 const gameOverMessage = document.getElementById("gameOver");
@@ -188,6 +196,72 @@ function playBackgroundMusic() {
 function stopBackgroundMusic() {
   bgMusic.pause();
   bgMusic.currentTime = 0;
+}
+function saveScoreAndTime() {
+  // Check if local storage is supported by the browser
+  if (typeof Storage !== "undefined") {
+    // Retrieve the previous highest score and played time from local storage
+
+    // Get the current date and time
+    const currentTime = new Date();
+
+    // Calculate the time difference in milliseconds
+    const timeDifference =
+      currentTime.getTime() - new Date(previousTime).getTime();
+
+    // Convert the time difference to minutes and seconds
+    const minutes = Math.floor(timeDifference / 60000);
+    const seconds = Math.floor((timeDifference % 60000) / 1000);
+
+    // If there is no previous score or the current score is higher, update the highest score and played time
+    if (!previousScore || score > previousScore) {
+      localStorage.setItem("highestScore", score);
+      localStorage.setItem("playedTime", currentTime.toISOString());
+    }
+  } else {
+    console.log("Local storage is not supported.");
+  }
+}
+function displayHighestScore() {
+  // Check if local storage is supported by the browser
+  if (typeof Storage !== "undefined") {
+    // Retrieve the highest score and played time from local storage
+    const highestScore = localStorage.getItem("scoreTimeDisplay");
+    const playedTime = localStorage.getItem("scoreTimeDisplay");
+
+    // Display the highest score and played time on the webpage
+    if (highestScore) {
+      const highestScoreDisplay = document.getElementById(
+        "highestScoreDisplay"
+      );
+      highestScoreDisplay.textContent = `Highest Score: ${highestScore}`;
+    }
+
+    if (playedTime) {
+      const playedTimeDisplay = document.getElementById("playedTimeDisplay");
+      playedTimeDisplay.textContent = `Played Time: ${playedTime}`;
+    }
+  } else {
+    console.log("Local storage is not supported.");
+  }
+}
+
+function displayHighestScore() {
+  // Check if local storage is supported by the browser
+  if (typeof Storage !== "undefined") {
+    // Retrieve the highest score from local storage
+    const highestScore = localStorage.getItem("highestScore");
+
+    // Display the highest score on the webpage
+    if (highestScore) {
+      const highestScoreDisplay = document.getElementById(
+        "highestScoreDisplay"
+      );
+      highestScoreDisplay.textContent = `Highest Score: ${highestScore}`;
+    }
+  } else {
+    console.log("Local storage is not supported.");
+  }
 }
 
 document.addEventListener("keydown", handleKeyDown);

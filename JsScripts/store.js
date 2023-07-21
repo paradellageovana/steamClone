@@ -1,6 +1,5 @@
-let itemsData = JSON.parse(localStorage.getItem("itemsData")) || new Array();
-let renderdflag = true;
-if (renderdflag) {
+let itemsData = JSON.parse(localStorage.getItem("itemsData")) || [];
+if (itemsData.length === 0) {
   itemsData = [
     {
       id: 1,
@@ -156,7 +155,7 @@ function renderItems() {
     addToCartBtn.textContent = "Add to Cart";
     addToCartBtn.addEventListener("click", () => {
       var isLoggedIn = sessionStorage.getItem("isLoggedIn");
-      if (isLoggedIn==="true") {
+      if (isLoggedIn === "true") {
         addToCart(item);
       } else {
         // Display a message or redirect the user to the login page
@@ -259,8 +258,9 @@ function emptyCart() {
 function checkout() {
   const total = calculateTotal();
 
+  if (total === 0) alert("cart is empty");
   // Redirect to the payment page with the total price as a query parameter
-  window.location.href = "payment.html?total=" + total;
+  else window.location.href = "payment.html?total=" + total;
 }
 
 // Calculate the total price of items in the cart

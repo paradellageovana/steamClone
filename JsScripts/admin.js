@@ -1,7 +1,14 @@
 var users = JSON.parse(localStorage.getItem("users"));
-
 let btnGet = document.querySelector(".buttonTable");
 let myTable = document.querySelector("#table");
+
+// Call the authentication check function on page load, when the page is shown, and when the URL changes
+window.onload =
+  window.onpageshow =
+  window.onpopstate =
+    function () {
+      checkAuthentication();
+    };
 
 let headers = [
   "UserName",
@@ -74,9 +81,9 @@ class User {
   }
 }
 
-let foo;
-
 //////////////////////////////////////////////////
+
+let foo;
 function editingUsers() {
   foo = prompt("Enter here The Mail For the user you want to edit: ");
   userShow(foo);
@@ -107,16 +114,18 @@ function userShow(foo) {
 
   if (index !== -1) {
     document.getElementById("Name").textContent = users[index].userName;
-    document.getElementById("userFirstName").textContent = users[index].userFirstName;
-    document.getElementById("userLastName").textContent = users[index].userLastName;
+    document.getElementById("userFirstName").textContent =
+      users[index].userFirstName;
+    document.getElementById("userLastName").textContent =
+      users[index].userLastName;
     document.getElementById("pw").textContent = users[index].pw;
-    document.getElementById("Name1").textContent = users[index].userName;
     document.getElementById("Email").textContent = users[index].email;
-    document.getElementById("Email1").textContent = users[index].email;
-    document.getElementById("DateOfBirth").textContent = users[index].DateOfBirth;
-    document.getElementById("city").textContent = users[index].city;
-    document.getElementById("StreetAddress").textContent = users[index].StreetAddress;
+    document.getElementById("DateOfBirth").textContent =
+      users[index].DateOfBirth;
+    document.getElementById("StreetAddress").textContent =
+      users[index].StreetAddress;
     document.getElementById("postBox").textContent = users[index].PostBox;
+    document.getElementById("city").textContent = users[index].CityName;
 
     var imgSrc = users[index].file;
 
@@ -127,7 +136,6 @@ function userShow(foo) {
     src.appendChild(img);
   }
 }
-
 
 function localStorageClean() {
   sessionStorage.clear();
@@ -145,6 +153,7 @@ function saveDetails(foo) {
       index = i;
       break;
     }
+    window.location.href = "../pages/admin.html";
   }
 
   var userName = document.getElementById("Name").innerHTML;
@@ -155,32 +164,32 @@ function saveDetails(foo) {
   var StreetAddress = document.getElementById("StreetAddress").innerHTML;
   var PostBox = document.getElementById("postBox").innerHTML;
   var email = document.getElementById("Email").innerHTML;
-  var file = 0;
+  var file = users[index].file;
   var pw = document.getElementById("pw").innerHTML;
   var pw2 = document.getElementById("pw").innerHTML;
 
-  if (!validateUserFirstName(userFirstName)){
+  if (!validateUserFirstName(userFirstName)) {
     return false;
   }
 
-  if (!validateUserLastName(userLastName)){
+  if (!validateUserLastName(userLastName)) {
     return false;
   }
- 
+
   if (!validateBirthDate(DateOfBirth)) {
     return false;
   }
-  ////city name validation 
-  
-   if (!validateStreetAddress(StreetAddress)) {
-     return false;
-   }
+  ////city name validation
 
-  if (!validatePostBox(PostBox)){
+  if (!validateStreetAddress(StreetAddress)) {
     return false;
   }
- 
-  if (!validatePassword(pw)) {
+
+  if (!validatePostBox(PostBox)) {
+    return false;
+  }
+
+  if (!validateCityNameFromList(CityName)) {
     return false;
   }
 
@@ -222,61 +231,23 @@ function deleteUser() {
 let deleteUserBtn = document.getElementById("deleteUserBtn");
 deleteUserBtn.addEventListener("click", deleteUser);
 
-
-
-document.getElementById("addItemBtn").addEventListener("click", function() {
+document.getElementById("addItemBtn").addEventListener("click", function () {
   window.location.href = "../pages/addNewItem.html"; // הפניה לדף HTML הרצוי
 });
 
-
-
-document.getElementById("getItemBtn").addEventListener("click", function() {
+document.getElementById("getItemBtn").addEventListener("click", function () {
   window.location.href = "../pages/items.html"; // הפניה לדף HTML הרצוי
 });
 
-
-
-
-
 /// valdation functions
-  function validatePassword(pw) {
-    if (pw.trim() === "") {
-      alert("Please enter Password");
-      return false;
-    }
-    if (!/\d/.test(pw)) {
-      alert("Your password needs a number");
-      return false;
-    }
-  
-    if (!/[A-Z]/.test(pw)) {
-      alert("Your password needs an uppercase letter");
-      return false;
-    }
-  
-    if (!/[a-z]/.test(pw)) {
-      alert("Your password needs a lowercase letter");
-      return false;
-    }
-    if (!/[^a-zA-Z0-9]/.test(pw)) {
-      alert("Your password needs a special character");
-      return false;
-    }
-    if (pw.length < 7 || pw.length > 12) {
-      alert("The password length must be between 7-12");
-      return false;
-    }
-    return true;
+function validateBirthDate(DateOfBirth) {
+  if (DateOfBirth.trim() === "") {
+    alert("Please enter Birth Date");
+    return false;
   }
-  function validateBirthDate(DateOfBirth) {
-    if (DateOfBirth.trim() === "") {
-      alert("Please enter Birth Date");
-      return false;
-    }
-    return true;
-  }
-  function validateStreetAddress(StreetAddress) {
-  
+  return true;
+}
+function validateStreetAddress(StreetAddress) {
   if (StreetAddress.trim() === "") {
     alert("Please enter Street Address");
     return false;
@@ -285,51 +256,70 @@ document.getElementById("getItemBtn").addEventListener("click", function() {
     alert("The street address must be in Hebrew");
     return false;
   }
-  
+
   return true;
-  
+}
+function cheekHebrewValidation(str) {
+  return /[\u0590-\u05FF]/.test(str);
+}
+function validatePostBox(PostBox) {
+  if (PostBox.trim() === "") {
+    alert("Please enter Post Box");
+    return false;
   }
-  function cheekHebrewValidation(str) {
-    return /[\u0590-\u05FF]/.test(str);
+  if (PostBox < 0) {
+    alert("number must be positive");
+    return false;
   }
-  function validatePostBox(PostBox) {
-    if (PostBox.trim() === "") {
-      alert("Please enter Post Box");
-      return false;
-    }
-    if (PostBox<0) {
-      alert("number must be positive");
-      return false;
-    }
-   
-   
-    return true;
+
+  return true;
+}
+function validateUserFirstName(userFirstName) {
+  if (userFirstName.trim() === "") {
+    alert("Please enter First Name");
+    return false;
   }
-  function validateUserFirstName(userFirstName) {
-    if (userFirstName.trim() === "") {
-      alert("Please enter First Name");
-      return false;
-    }
-    if (containsNumber(userFirstName)) {
-      alert("User first name  must not contain numbers");
-      return false;
-    }
-    return true;
+  if (containsNumber(userFirstName)) {
+    alert("User first name  must not contain numbers");
+    return false;
   }
-  function containsNumber(str) {
-    return /\d/.test(str);
+  return true;
+}
+function containsNumber(str) {
+  return /\d/.test(str);
+}
+function validateUserLastName(userLastName) {
+  if (userLastName.trim() === "") {
+    alert("Please enter Last Name");
+    return false;
   }
-  function validateUserLastName(userLastName) {
-    
-    if (userLastName.trim() === "") {
-      alert("Please enter Last Name");
-      return false;
-    }
-    if (containsNumber(userLastName)) {
-      alert("User last name must not contain numbers");
-      return false;
-    }
-  
-    return true;
+  if (containsNumber(userLastName)) {
+    alert("User last name must not contain numbers");
+    return false;
   }
-  
+
+  return true;
+}
+function validateCityNameFromList(CityName) {
+  if (CityName.length === 0) {
+    alert("Please enter city name");
+    return false;
+  }
+
+  return true;
+}
+
+function logout() {
+  sessionStorage.setItem("isAdminLoggedIn", false);
+  console.log("logut");
+  location.replace("../../index.html");
+}
+
+function checkAuthentication() {
+  let isAuthenticated = sessionStorage.getItem("isAdminLoggedIn");
+
+  // If user is not authenticated, redirect to login page
+  if (!isAuthenticated) {
+    window.location.href = "login.html";
+  }
+}
